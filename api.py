@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import threading
 from scraper import background_task  
+from retriever import search_articles  
 
 app = Flask(__name__)
 

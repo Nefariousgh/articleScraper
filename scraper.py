@@ -1,57 +1,45 @@
-import requests
-from bs4 import BeautifulSoup
-import sqlite3
-import time
+from playwright.async_api import async_playwright
+import asyncio
+import threading
 
-DATABASE = 'news_articles.db'
+async def scrape_news():
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=True)
+        page = await browser.new_page()
+        await page.goto('https://news.google.com/topstories?hl=en-GB&gl=GB&ceid=GB:en')
 
-def init_db():
-    "SQLite is init"
-    with sqlite3.connect(DATABASE) as conn:
-        cursor = conn.cursor()
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS articles (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                title TEXT,
-                url TEXT,
-                content TEXT
-            )
-        ''')
-        conn.commit()
+        for _ in range(5):
+            await page.evaluate('window.scrollBy(0, window.innerHeight)')
+            await page.wait_for_timeout(1000)
 
-def insert_article(title, url, content):
-    "article added to db"
-    with sqlite3.connect(DATABASE) as conn:
-        cursor = conn.cursor()
-        cursor.execute('''
-            INSERT INTO articles (title, url, content) VALUES (?, ?, ?)
-        ''', (title, url, content))
-        conn.commit()
+        articles = await page.query_selector_all('article')
+        newslist = []
 
-def scrape_news():
-    "scraping google news"
-    print("Google news scrape started")
-    url = 'https://news.google.com'
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    articles = soup.find_all('article')
-    for article in articles:
-        title = article.find('h3').text if article.find('h3') else 'No Title'
-        link = article.find('a')['href'] if article.find('a') else 'No URL'
-        content = 'No Content'  
-            
-        if not link.startswith('http'):
-            link = 'https://news.google.com' + link
+        for item in articles:
+            try:
+                newsitem = await item.query_selector('h3')
+                title = await newsitem.inner_text()
+                link = await newsitem.get_attribute('href')
+                newsarticle = {
+                    'title': title,
+                    'link': link
+                }
+                newslist.append(newsarticle)
+            except Exception as e:
+                print(f"Error extracting article: {e}")
 
-        insert_article(title, link, content)
-        
-    print("Scraping complete.")
-
-
+        await browser.close()
+        print(f"Scraped {len(newslist)} articles")
+        return newslist  
 
 def background_task():
-    "bg scrape __________________ "
-    init_db()  
+    asyncio.run(run_background_task())
+
+async def run_background_task():
     while True:
-        scrape_news()
-        time.sleep(3600)  
+        await scrape_news()
+        await asyncio.sleep(3600) 
+
+if __name__ == "__main__":
+    thread = threading.Thread(target=background_task)
+    thread.start()

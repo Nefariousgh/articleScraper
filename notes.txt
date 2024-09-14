@@ -1,6 +1,9 @@
 /health function done
 /search function not real search
 Web scraper and storage 
+  fix no titles (switching to htmlsession from bs4)
+    Chromium 129.0.6668.29 plus playwright build
+    
 news article web scraper
 Handle dynamic content and errors 
 Store scraped articles in database
