@@ -1,0 +1,8 @@
+/health function done
+/search function not real search
+Web scraper and storage 
+news article web scraper
+Handle dynamic content and errors 
+Store scraped articles in database
+Caching 
+Dockerization
