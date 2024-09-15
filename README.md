@@ -1,5 +1,5 @@
 # 21BCE7665_ML
-Backend for dcoument retrieval which can be used as context for LLMs 
+Backend for document retrieval which can be used as context for LLMs 
 ## API Readme
 
 This Flask API provides endpoints for scraping news articles from Google news website.
