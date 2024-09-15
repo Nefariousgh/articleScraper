@@ -3,9 +3,9 @@
 Web scraper and storage 
   fix no titles (switching to htmlsession from bs4)
     Chromium 129.0.6668.29 plus playwright build
-    
 news article web scraper
-Handle dynamic content and errors 
+done
 Store scraped articles in database
-Caching 
+done
+rate limiter applied
 Dockerization
