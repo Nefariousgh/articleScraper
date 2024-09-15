@@ -28,13 +28,15 @@ The API will be available at http://127.0.0.1:5000.
         in order to perform the query.
         since there is no frontend implemented yet this can be accessed via the terminal using the following command.
         on powershell :
+        
                         Invoke-RestMethod -Uri http://127.0.0.1:5000/search -Method Post -Body '{
                         "text": "testing",
                         "top_k": 3,
                         "threshold": 0.8,
                         "user_id": "user123"
                       }' -ContentType "application/json"  
-        on Linux:
+on Linux:    
+
                         curl -X POST http://127.0.0.1:5000/search \
                          -H "Content-Type: application/json" \
                          -d '{
@@ -42,10 +44,10 @@ The API will be available at http://127.0.0.1:5000.
                                "top_k": 3,
                                "threshold": 0.8,
                                "user_id": "user123"
-                             }'
-      The results will be displayed as:
+                             }'  
+The results will be displayed as:     
         ![image](https://github.com/user-attachments/assets/65e4f890-012c-48b6-855b-245923fa33f6)
-      if the user api limit is hit then:
+If the user api limit is hit then:
       ![image](https://github.com/user-attachments/assets/2aec7173-bcfb-4944-8e23-a24df84ac7e3)
 
 
@@ -78,4 +80,14 @@ user_calls.db
         user_id: TEXT PRIMARY KEY
         call_frequency: INTEGER
     Purpose: Tracks the frequency of API calls per user.
-        
+
+# Dockerization
+The docker image can be built as:
+    docker build -t my-flask-app
+    
+    docker build -t my-flask-app
+To run the docker container:
+
+    docker run -p 5000:5000 my-flask-app
+
+The application can be accessed at http://localhost:5000.
