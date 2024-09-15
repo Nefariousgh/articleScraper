@@ -66,8 +66,10 @@ def search():
     def fetch_articles():
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        return loop.run_until_complete(scrape_news(text, top_k))
-
+        results = loop.run_until_complete(scrape_news(text, top_k))
+        print(f"Results returned: {len(results)}") 
+        return results
+        
     future = executor.submit(fetch_articles)
     results = future.result()
 

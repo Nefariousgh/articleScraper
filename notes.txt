@@ -8,4 +8,23 @@ done
 Store scraped articles in database
 done
 rate limiter applied
+****************************
+program sucessfully displays the required articles in terminal
+use the following powershell commands to test
+------------------------------------------------------
+$headers = @{
+    "Content-Type" = "application/json"
+}
+
+$body = @{
+    text = "testing"
+    top_k = 3
+    threshold = 0.8
+    user_id = "admin"
+} | ConvertTo-Json
+
+$response = Invoke-RestMethod -Uri http://127.0.0.1:5000/search -Method Post -Headers $headers -Body $body
+$response | ConvertTo-Json -Depth 10
+-------------------------------------------------------
+
 Dockerization

@@ -24,7 +24,7 @@ async def scrape_news(query, top_k):
         except Exception as e:
             print(f"Error extracting article: {e}")
 
-    return newslist
+    return newslist[:top_k]
 
 def store_articles(article):
     
