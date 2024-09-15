@@ -57,9 +57,9 @@ articles.db
     Table: articles
     Columns:
         id: INTEGER PRIMARY KEY AUTOINCREMENT
-        query: TEXT
         link: TEXT
     Purpose: Stores news articles associated with queries.
+![image](https://github.com/user-attachments/assets/897ee452-b250-4ccc-b6fd-1354f858951f)
 
 api_requests.db
 
@@ -72,6 +72,7 @@ api_requests.db
         inference_time: REAL
         timestamp: DATETIME DEFAULT CURRENT_TIMESTAMP
     Purpose: Logs API requests including query, results, and inference time.
+![image](https://github.com/user-attachments/assets/f4ad00c9-6082-40bc-84ac-973497153384)
 
 user_calls.db
 
@@ -80,6 +81,7 @@ user_calls.db
         user_id: TEXT PRIMARY KEY
         call_frequency: INTEGER
     Purpose: Tracks the frequency of API calls per user.
+![image](https://github.com/user-attachments/assets/22ac0ecc-c018-494f-a283-cd26a12d5e43)
 
 # Dockerization
 The docker image can be built as:
