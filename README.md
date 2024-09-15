@@ -87,9 +87,9 @@ user_calls.db
 
 # Dockerization
 The docker image can be built as:
-    docker build -t my-flask-app
+    docker build -t example
     
-    docker build -t my-flask-app
+    docker build -t example
 To run the docker container:
 
     docker run -p 5000:5000 my-flask-app
