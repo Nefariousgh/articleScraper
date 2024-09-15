@@ -1,45 +1,59 @@
-from playwright.async_api import async_playwright
+import sqlite3
+from GoogleNews import GoogleNews
+from requests_html import HTMLSession
 import asyncio
-import threading
+
+googlenews = GoogleNews(lang='en')
+
+def create_database():
+    conn = sqlite3.connect('articles.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS articles (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            link TEXT NOT NULL
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+def insert_article(title, link):
+    conn = sqlite3.connect('articles.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO articles (title, link)
+        VALUES (?, ?)
+    ''', (title, link))
+    conn.commit()
+    conn.close()
 
 async def scrape_news():
-    async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
-        page = await browser.new_page()
-        await page.goto('https://news.google.com/topstories?hl=en-GB&gl=GB&ceid=GB:en')
+    googlenews.search('legal web scraping')
+    results = googlenews.result()
 
-        for _ in range(5):
-            await page.evaluate('window.scrollBy(0, window.innerHeight)')
-            await page.wait_for_timeout(1000)
+    newslist = []
+    for item in results:
+        try:
+            title = item['title']    
+            link = item['link']      
+            newsarticle = {
+                'title': title,
+                'link': link
+            }
+            newslist.append(newsarticle)
+            insert_article(title, link)
+        
+        except Exception as e:
+            print(f"Error extracting article: {e}")
 
-        articles = await page.query_selector_all('article')
-        newslist = []
+    print(f"News scraped: {len(newslist)} articles")
 
-        for item in articles:
-            try:
-                newsitem = await item.query_selector('h3')
-                title = await newsitem.inner_text()
-                link = await newsitem.get_attribute('href')
-                newsarticle = {
-                    'title': title,
-                    'link': link
-                }
-                newslist.append(newsarticle)
-            except Exception as e:
-                print(f"Error extracting article: {e}")
-
-        await browser.close()
-        print(f"Scraped {len(newslist)} articles")
-        return newslist  
-
-def background_task():
-    asyncio.run(run_background_task())
-
-async def run_background_task():
+async def background_task():
+    create_database()  
     while True:
         await scrape_news()
-        await asyncio.sleep(3600) 
+        await asyncio.sleep(3600)  
 
-if __name__ == "__main__":
-    thread = threading.Thread(target=background_task)
-    thread.start()
+def run_background_task():
+    asyncio.run(background_task())

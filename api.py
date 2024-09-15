@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 import threading
-from scraper import background_task  
+from scraper import run_background_task
 from retriever import search_articles  
 
 app = Flask(__name__)
@@ -27,7 +27,7 @@ def search():
 
 if __name__ == '__main__':
     print("Starting Flask server...")
-    thread = threading.Thread(target=background_task)
+    thread = threading.Thread(target=run_background_task)
     thread.daemon = True
     thread.start()
     app.run(debug=True)
