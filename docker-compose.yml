@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  21bce7665ml:
+    image: 21bce7665ml
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 5002:5002
