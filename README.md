@@ -50,6 +50,8 @@ The results will be displayed as:
 If the user api limit is hit then:
       ![image](https://github.com/user-attachments/assets/2aec7173-bcfb-4944-8e23-a24df84ac7e3)
 
+The program first parses the articles database inorder to check if the query has been called before. If it has it returns the data from the database.
+If the query is not found then the scraper is run and data is added to articles.db in an effort to optimize.
 
 # Database Structure
 articles.db
