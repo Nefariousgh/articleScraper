@@ -1,4 +1,4 @@
-#articleScraper
+# articleScraper
 Backend for document retrieval which can be used as context for LLMs 
 ## API Readme
 
