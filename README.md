@@ -97,5 +97,4 @@ To run the docker container:
 Docker image:
 ![image](https://github.com/user-attachments/assets/0028eedb-de19-400a-9445-deab7a9a1cc6)
 
-The application can be accessed at http://localhost:5000.
 
